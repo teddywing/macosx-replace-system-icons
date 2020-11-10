@@ -9,7 +9,7 @@ REPLACEMENT="$(cd "$(dirname "$0")" && pwd)/Icons"
 sudo -v
 
 # Backup CoreTypes.bundle
-sudo cp -R "$CORE_TYPES" "${CORE_TYPES}.backup"
+sudo cp -a "$CORE_TYPES" "${CORE_TYPES}.backup"
 
 # Set icons
 sudo cp -f "$REPLACEMENT/ApplicationsFolderIcon.icns" "$GENERIC_ICONS/"
