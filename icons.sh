@@ -1,5 +1,7 @@
 #!/bin/sh
 
+DOCK=/System/Library/CoreServices/Dock.app
+
 CORE_TYPES=/System/Library/CoreServices/CoreTypes.bundle
 
 IO_STORAGE_FAMILY=/System/Library/Extensions/IOStorageFamily.kext
@@ -16,6 +18,7 @@ sudo -v
 # Backup system files
 NOW=$(date +%Y-%m-%dT%H:%M:%S%z)
 
+sudo tar czf "${DOCK}.backup-${NOW}.tar.gz" "$DOCK"
 sudo tar czf "${CORE_TYPES}.backup-${NOW}.tar.gz" "$CORE_TYPES"
 sudo tar czf "${IO_STORAGE_FAMILY}.backup-${NOW}.tar.gz" "$IO_STORAGE_FAMILY"
 sudo tar czf "${IO_SCSI_ARCHITECTURE_MODEL_FAMILY}.backup-${NOW}.tar.gz" "$IO_SCSI_ARCHITECTURE_MODEL_FAMILY"
@@ -23,7 +26,22 @@ sudo tar czf "${IO_CD_STORAGE_FAMILY}.backup-${NOW}.tar.gz" "$IO_CD_STORAGE_FAMI
 sudo tar czf "${IO_DVD_STORAGE_FAMILY}.backup-${NOW}.tar.gz" "$IO_DVD_STORAGE_FAMILY"
 sudo tar czf "${IO_BD_STORAGE_FAMILY}.backup-${NOW}.tar.gz" "$IO_BD_STORAGE_FAMILY"
 
-# TODO: /System/Library/CoreServices/Dock.app/Contents/Resources/
+# Dock icons
+sips -s format png --resampleHeightWidthMax 128 "${REPLACEMENT}/TrashIcon.icns" --out /tmp/trashempty.png
+sips -s format png --resampleHeightWidthMax 256 "${REPLACEMENT}/TrashIcon.icns" --out '/tmp/trashempty@2x.png'
+
+sips -s format png --resampleHeightWidthMax 128 "${REPLACEMENT}/FullTrashIcon.icns" --out /tmp/trashfull.png
+sips -s format png --resampleHeightWidthMax 256 "${REPLACEMENT}/FullTrashIcon.icns" --out '/tmp/trashfull@2x.png'
+
+sips -s format png --resampleHeightWidthMax 128 "${REPLACEMENT}/FinderIcon.icns" --out /tmp/finder.png
+sips -s format png --resampleHeightWidthMax 256 "${REPLACEMENT}/FinderIcon.icns" --out '/tmp/finder@2x.png'
+
+sudo cp -f /tmp/trashempty.png "${DOCK}/Contents/Resources/"
+sudo cp -f '/tmp/trashempty@2x.png' "${DOCK}/Contents/Resources/"
+sudo cp -f /tmp/trashfull.png "${DOCK}/Contents/Resources/"
+sudo cp -f '/tmp/trashfull@2x.png' "${DOCK}/Contents/Resources/"
+sudo cp -f /tmp/finder.png "${DOCK}/Contents/Resources/"
+sudo cp -f '/tmp/finder@2x.png' "${DOCK}/Contents/Resources/"
 
 # Set icons
 read -r -d '' icons <<'EOF'
