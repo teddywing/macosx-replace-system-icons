@@ -1,71 +1,99 @@
 #!/bin/sh
 
 CORE_TYPES=/System/Library/CoreServices/CoreTypes.bundle
-GENERIC_ICONS=/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources
+
+IO_STORAGE_FAMILY=/System/Library/Extensions/IOStorageFamily.kext
+IO_SCSI_ARCHITECTURE_MODEL_FAMILY=/System/Library/Extensions/IOSCSIArchitectureModelFamily.kext
+IO_CD_STORAGE_FAMILY=/System/Library/Extensions/IOCDStorageFamily.kext
+IO_DVD_STORAGE_FAMILY=/System/Library/Extensions/IODVDStorageFamily.kext
+IO_BD_STORAGE_FAMILY=/System/Library/Extensions/IOBDStorageFamily.kext
 
 REPLACEMENT="$(cd "$(dirname "$0")" && pwd)/Icons"
 
 # Authenticate
 sudo -v
 
-# Backup CoreTypes.bundle
-sudo cp -a "$CORE_TYPES" "${CORE_TYPES}.backup"
+# Backup system files
+NOW=$(date +%Y-%m-%dT%H:%M:%S%z)
+
+sudo tar czf "${CORE_TYPES}.backup-${NOW}.tar.gz" "$CORE_TYPES"
+sudo tar czf "${IO_STORAGE_FAMILY}.backup-${NOW}.tar.gz" "$IO_STORAGE_FAMILY"
+sudo tar czf "${IO_SCSI_ARCHITECTURE_MODEL_FAMILY}.backup-${NOW}.tar.gz" "$IO_SCSI_ARCHITECTURE_MODEL_FAMILY"
+sudo tar czf "${IO_CD_STORAGE_FAMILY}.backup-${NOW}.tar.gz" "$IO_CD_STORAGE_FAMILY"
+sudo tar czf "${IO_DVD_STORAGE_FAMILY}.backup-${NOW}.tar.gz" "$IO_DVD_STORAGE_FAMILY"
+sudo tar czf "${IO_BD_STORAGE_FAMILY}.backup-${NOW}.tar.gz" "$IO_BD_STORAGE_FAMILY"
+
+# TODO: /System/Library/CoreServices/Dock.app/Contents/Resources/
 
 # Set icons
-sudo cp -f "$REPLACEMENT/ApplicationsFolderIcon.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/BD-R.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/BD-RE.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/BD.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/BurnableFolderIcon.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/BurningIcon.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/CD-R.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/CD-RW.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/CD.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/ConnectToIcon.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/DVD+R.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/DVD+RW.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/DVD-R.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/DVD-RAM.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/DVD-RW.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/DVD.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/DesktopFolderIcon.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/DeveloperFolderIcon.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/DocumentsFolderIcon.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/DownloadsFolder.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/DropFolderBadgeIcon.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/EjectMediaIcon.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/External.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/FinderIcon.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/FireWireHD.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/FullTrashIcon.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/GenericAirDiskIcon.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/GenericApplicationIcon.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/GenericFileServerIcon.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/GenericFolderIcon.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/GenericNetworkIcon.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/GroupFolder.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/HomeFolderIcon.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/Internal.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/LibraryFolderIcon.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/MovieFolderIcon.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/MusicFolderIcon.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/OpenFolderIcon.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/PicturesFolderIcon.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/PrivateFolderBadgeIcon.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/PublicFolderIcon.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/Removable.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/SitesFolderIcon.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/SmartFolderIcon.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/SystemFolderIcon.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/TimeMachine.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/ToolbarDeleteIcon.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/ToolbarInfo.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/TrashIcon.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/USBHD.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/UsersFolderIcon.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/UtilitiesFolder.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/iDiskGenericIcon.icns" "$GENERIC_ICONS/"
-sudo cp -f "$REPLACEMENT/iDiskUserIcon.icns" "$GENERIC_ICONS/"
+read -r -d '' icons <<'EOF'
+ApplicationsFolderIcon.icns
+BD-R.icns
+BD-RE.icns
+BD.icns
+BurnableFolderIcon.icns
+BurningIcon.icns
+CD-R.icns
+CD-RW.icns
+CD.icns
+ConnectToIcon.icns
+DVD+R.icns
+DVD+RW.icns
+DVD-R.icns
+DVD-RAM.icns
+DVD-RW.icns
+DVD.icns
+DesktopFolderIcon.icns
+DeveloperFolderIcon.icns
+DocumentsFolderIcon.icns
+DownloadsFolder.icns
+DropFolderBadgeIcon.icns
+EjectMediaIcon.icns
+External.icns
+FinderIcon.icns
+FireWireHD.icns
+FullTrashIcon.icns
+GenericAirDiskIcon.icns
+GenericApplicationIcon.icns
+GenericFileServerIcon.icns
+GenericFolderIcon.icns
+GenericNetworkIcon.icns
+GroupFolder.icns
+HomeFolderIcon.icns
+Internal.icns
+LibraryFolderIcon.icns
+MovieFolderIcon.icns
+MusicFolderIcon.icns
+OpenFolderIcon.icns
+PicturesFolderIcon.icns
+PrivateFolderBadgeIcon.icns
+PublicFolderIcon.icns
+Removable.icns
+SitesFolderIcon.icns
+SmartFolderIcon.icns
+SystemFolderIcon.icns
+TimeMachine.icns
+ToolbarDeleteIcon.icns
+ToolbarInfo.icns
+TrashIcon.icns
+USBHD.icns
+UsersFolderIcon.icns
+UtilitiesFolder.icns
+iDiskGenericIcon.icns
+EOF
+
+for icon in $icons; do
+	for location in "${CORE_TYPES}/Contents/Resources" \
+			"${IO_STORAGE_FAMILY}/Contents/Resources" \
+			"${IO_SCSI_ARCHITECTURE_MODEL_FAMILY}/Contents/Resources" \
+			"${IO_CD_STORAGE_FAMILY}/Contents/Resources" \
+			"${IO_DVD_STORAGE_FAMILY}/Contents/Resources" \
+			"${IO_BD_STORAGE_FAMILY}/Contents/Resources"; do
+		if [ -f "${location}/${icon}" ]; then
+			sudo cp -f "${REPLACEMENT}/${icon}" "${location}/${icon}"
+		fi
+	done
+done
 
 # Clear icon cache
 sudo find /private/var/folders/ -name 'com.apple.dock.iconcache' -delete
