@@ -5,6 +5,21 @@
 # Takes an icns file and adds missing @1x and 32px sizes. Creates a new icns
 # file based on the input in the current directory.
 
+# Copyright (c) 2020  Teddy Wing
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
+
 EX_USAGE=64
 
 if [ $# -ne 1 ]; then
