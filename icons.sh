@@ -117,3 +117,5 @@ done
 sudo find /private/var/folders/ -name 'com.apple.dock.iconcache' -delete
 sudo find /private/var/folders/ -name 'com.apple.iconservices' -delete
 sudo mv /Library/Caches/com.apple.iconservices.store $HOME/.Trash/
+
+echo 'Please restart this machine for icon changes to take effect'
